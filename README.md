@@ -1,4 +1,4 @@
 TextEdit--SavShi
 ================
 
-TextEdit - Savchuk-Shibalko
+This is Text Editor application for Windows and Android.
