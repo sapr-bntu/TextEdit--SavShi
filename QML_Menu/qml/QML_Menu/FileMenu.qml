@@ -8,7 +8,7 @@ Rectangle {
     height: 480; width:1000
     property color buttonBorderColor: "#7F8487"
     property color buttonFillColor: "#8FBDCACD"
-    property string fileContent:directory.fileContent
+    //property string fileContent:directory.fileContent
 
     //the menuName is accessible from outside this QML file
     property string menuName: "File"

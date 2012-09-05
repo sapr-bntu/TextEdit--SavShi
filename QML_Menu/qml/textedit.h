@@ -34,8 +34,8 @@ private:
 public slots:
     void fileNew();
     QString fileOpen();
-    void openWord();
-    void SaveWord();
+    QString openWord();
+    void saveWord(const QString &str);
     bool fileSave();
     bool fileSaveAs(const QString &str);
     void filePrint(const QString &str);
@@ -66,7 +66,7 @@ private:
 
     QAction
     *actionopenWord,
-    //*actionSaveWord,
+    *actionsaveWord,
         *actionSave,
         *actionTextBold,
         *actionTextUnderline,

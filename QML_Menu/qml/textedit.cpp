@@ -149,7 +149,7 @@
 
      a = new QAction(tr("Save &As..."), this);
      a->setPriority(QAction::LowPriority);
-     connect(a, SIGNAL(triggered()), this, SLOT(fileSaveAs()));
+     connect(a, SIGNAL(triggered()), this, SLOT(fileSaveAs(QString)));
      menu->addAction(a);
      menu->addSeparator();
 
@@ -158,7 +158,7 @@
                      tr("&Print..."), this);
      a->setPriority(QAction::LowPriority);
      a->setShortcut(QKeySequence::Print);
-     connect(a, SIGNAL(triggered()), this, SLOT(filePrint()));
+     connect(a, SIGNAL(triggered()), this, SLOT(filePrint(QString)));
      tb->addAction(a);
      menu->addAction(a);
 
@@ -175,13 +175,6 @@
      tb->addAction(a);
      menu->addAction(a);
      menu->addSeparator();
-
-     actionopenWord = a = new QAction(QIcon::fromTheme("OpenWord", QIcon(rsrcPath + "/word.ico")), tr("OpenWord"), this);
-     connect(a, SIGNAL(triggered()), this, SLOT(OpenWord()));
-     tb->addAction(a);
-     /*actionSaveWord = a = new QAction(QIcon::fromTheme("SaveWord", QIcon(rsrcPath + "/word.ico")), tr("SaveWord"), this);
-     connect(a, SIGNAL(triggered()), this, SLOT(SaveWord()));
-     tb->addAction(a);*/
 
  #endif
 
@@ -419,7 +412,7 @@
  }
 
 
- void TextEdit::openWord()
+QString TextEdit::openWord()
  {
      QString fn = QFileDialog::getOpenFileName(this, tr("Open File..."),
                                                QString(), tr("*docx"));
@@ -429,7 +422,6 @@
      QProcess *zipProcess  = new QProcess();
      zipProcess->start(program);
      zipProcess->waitForFinished();
-
      QString fn1 = "./word/document.xml";
      QFile file(fn1);
      file.open(QFile::ReadOnly);
@@ -491,16 +483,22 @@
          }
 
      }
-     textEdit->setPlainText(str);
+
+     return str;
  }
 
 
- void TextEdit::SaveWord()
+ void TextEdit::saveWord(const QString &str)
  {
      QString fn = QFileDialog::getSaveFileName(this, tr("Save File..."),
-                                               QString(), tr("All Files (*)"));
+                                               QString(), tr("*docx"));
 
-
+     QFile doc1;
+     doc1.setFileName("./document.xml");
+     QFile del1;
+     del1.setFileName("./2/word/document.xml");
+     del1.remove();
+     doc1.copy("./2/word/document.xml");
      QFile fille;
      fille.setFileName("./2/word/document.xml");
      fille.open(QIODevice::ReadOnly);
@@ -508,22 +506,16 @@
      bytteet = fille.readAll();
      fille.close();
      fille.remove();
-     QString str;
-     str=textEdit->toPlainText();
      fille.open(QIODevice::WriteOnly);
      QByteArray dddd= str.toLocal8Bit();
      bytteet = bytteet.replace("ZZZZZZ",dddd);
      fille.write(bytteet);
      fille.close();
-//     qDebug()<<bytteet;
-
      QString program = "7z.exe a -tzip -y 1.docx ./2/*";
      qDebug()<<program;
      QProcess *zipProcess  = new QProcess();
      zipProcess->start(program);
      zipProcess->waitForFinished();
-
-
  }
 
  QString TextEdit::fileOpen()
@@ -538,9 +530,6 @@
 
  bool TextEdit::fileSave()
  {
-     //if (fileName.isEmpty())
-        // return fileSaveAs();
-
      QTextDocumentWriter writer(fileName);
      bool success = writer.write(textEdit->document());
      if (success)
@@ -705,7 +694,6 @@
 
          cursor.endEditBlock();
      } else {
-         // ####
          QTextBlockFormat bfmt;
          bfmt.setObjectIndex(-1);
          cursor.mergeBlockFormat(bfmt);

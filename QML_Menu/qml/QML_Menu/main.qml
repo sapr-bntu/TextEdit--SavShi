@@ -122,6 +122,15 @@ Rectangle {
                 sourceSize.width: 32
                 opacity: 1
             }
+
+            PropertyChanges {
+                target: saveWordimage
+                x: 0
+                y: 0
+                width: 30
+                height: 30
+                opacity: 0
+            }
         },
         State {
             name: "DRAWER_CLOSED"
@@ -144,25 +153,28 @@ Rectangle {
                 target: row1
                 x: 29
                 y: 45
-                width: 442
+                width: 474
                 height: 39
                 anchors.horizontalCenterOffset: 0
             }
 
             PropertyChanges {
-                target: openwordimage
+                target: buttonopenword
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: buttonsaveWord
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: saveWordimage
                 x: 0
                 y: 0
                 width: 30
                 height: 30
-                opacity: 1
-                sourceSize.height: 32
-                sourceSize.width: 32
-                source: "images/mac/fileopen.png"
-            }
-
-            PropertyChanges {
-                target: buttonopenword
+                source: "images/mac/filesave.png"
                 opacity: 1
             }
         }
@@ -245,29 +257,6 @@ Rectangle {
                      textclass.filePrint(textEdit.text);
                  }
              }
-//              BaseButton {
-//                 id: buttonRedo
-//                // text: "Redo"
-//                 Image {
-//                     anchors.fill: parent
-//                     id: redoImage
-//                     source: "./images/mac/editredo.png"
-//                 }
-//             }
-
-//              BaseButton {
-//                 id: buttonUndo
-//                 //text: "Undo"
-//                 Image {
-//                     anchors.fill: parent
-//                     id: undoImage
-//                     source: "./images/mac/editundo.png"
-//                 }
-//                 onClicked:
-//                 {
-
-//                 }
-//             }
 
              BaseButton {
                  id: buttonLeft
@@ -370,9 +359,29 @@ Rectangle {
                  }
                  onClicked:
                  {
-                    textclass.openWord(textEdit.text);
+                    var str = textclass.openWord(textEdit.text);
+                    textEdit.text = str;
+                 }
+             }
+
+             BaseButton {
+                 id: buttonsaveWord
+                 x: 444
+                 y: 0
+                 opacity: 0
+
+                 Image {
+                     id: saveWordimage
+                     x: 0
+                     y: 0
+                     width: 30
+                     height: 30
+                     opacity: 0
+                 }
+                 onClicked:
+                 {
+                    textclass.saveWord(textEdit.text);
                  }
              }
          }
-
 }
